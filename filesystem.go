@@ -13,13 +13,14 @@ import (
 var Separator = fmt.Sprintf("%c", os.PathSeparator)
 
 func Exists(path string) (bool, error) {
-	if _, err := os.Stat(path); err == nil {
+	_, err := os.Stat(path)
+	if err == nil {
 		return true, nil
-	} else {
-		// file may or may not exist. See err for details.
-		// Therefore, do *NOT* use !os.IsNotExist(err) to test for file existence
-		return false, err
 	}
+
+	// file may or may not exist. See err for details.
+	// Therefore, do *NOT* use !os.IsNotExist(err) to test for file existence
+	return false, err
 }
 
 func Get(path string) (b []byte, err error) {
