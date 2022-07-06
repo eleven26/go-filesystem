@@ -247,3 +247,18 @@ func TestFiles(t *testing.T) {
 	assert.Equal(t, 1, len(files))
 	assert.Equal(t, "foo.txt", files[0])
 }
+
+func TestAllFiles(t *testing.T) {
+	path := "test"
+	files, _ := AllFiles(path)
+	assert.Equal(t, 2, len(files))
+	assert.Equal(t, "foo.txt", files[0])
+	assert.Equal(t, "tmp/.gitkeep", files[1])
+}
+
+func TestDirectories(t *testing.T) {
+	path := "test"
+	dirs, _ := Directories(path)
+	assert.Equal(t, 1, len(dirs))
+	assert.Equal(t, "tmp", dirs[0])
+}

@@ -1,6 +1,7 @@
 package fs
 
 import (
+	"fmt"
 	"io/fs"
 	"io/ioutil"
 	"os"
@@ -8,6 +9,8 @@ import (
 	"strings"
 	"time"
 )
+
+var Separator = fmt.Sprintf("%c", os.PathSeparator)
 
 func Exists(path string) (bool, error) {
 	if _, err := os.Stat(path); err == nil {
@@ -177,14 +180,57 @@ func IsFile(path string) (bool, error) {
 
 // Files List the files under the folder, excluding directories.
 func Files(dir string) (files []string, err error) {
-	fileinfos, err := ioutil.ReadDir(dir)
+	fileInfos, err := ioutil.ReadDir(dir)
 	if err != nil {
 		return
 	}
 
-	for _, f := range fileinfos {
+	for _, f := range fileInfos {
 		if !f.IsDir() {
 			files = append(files, f.Name())
+		}
+	}
+
+	return
+}
+
+func AllFiles(dir string) (files []string, err error) {
+	fileInfos, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return
+	}
+
+	for _, f := range fileInfos {
+		if f.IsDir() {
+			allFiles, e := AllFiles(strings.Join([]string{dir, f.Name()}, Separator))
+			if e != nil {
+				err = e
+				return
+			}
+
+			newFiles := make([]string, len(allFiles))
+			for i, file := range allFiles {
+				newFiles[i] = strings.Join([]string{f.Name(), file}, Separator)
+			}
+
+			files = append(files, newFiles...)
+		} else {
+			files = append(files, f.Name())
+		}
+	}
+
+	return
+}
+
+func Directories(dir string) (dirs []string, err error) {
+	fileInfos, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return
+	}
+
+	for _, f := range fileInfos {
+		if f.IsDir() {
+			dirs = append(dirs, f.Name())
 		}
 	}
 
