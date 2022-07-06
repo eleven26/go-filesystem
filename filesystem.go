@@ -174,3 +174,19 @@ func IsWritable(path string) (bool, error) {
 func IsFile(path string) (bool, error) {
 	return Exists(path)
 }
+
+// Files List the files under the folder, excluding directories.
+func Files(dir string) (files []string, err error) {
+	fileinfos, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return
+	}
+
+	for _, f := range fileinfos {
+		if !f.IsDir() {
+			files = append(files, f.Name())
+		}
+	}
+
+	return
+}

@@ -240,3 +240,10 @@ func TestIsFile(t *testing.T) {
 	b, _ := IsFile(path)
 	assert.True(t, b)
 }
+
+func TestFiles(t *testing.T) {
+	path := "test"
+	files, _ := Files(path)
+	assert.Equal(t, 1, len(files))
+	assert.Equal(t, "foo.txt", files[0])
+}
