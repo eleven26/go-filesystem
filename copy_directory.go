@@ -75,11 +75,7 @@ func createIfNotExists(dir string, perm os.FileMode) error {
 		return err
 	}
 
-	if err := MakeDirectories(dir, perm); err != nil {
-		return err
-	}
-
-	return nil
+	return MakeDirectories(dir, perm)
 }
 
 func copySymLink(src, dst string) error {
