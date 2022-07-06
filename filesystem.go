@@ -236,3 +236,19 @@ func Directories(dir string) (dirs []string, err error) {
 
 	return
 }
+
+func MakeDirectory(path string, mode os.FileMode) error {
+	return os.Mkdir(path, mode)
+}
+
+func MakeDirectories(path string, mode os.FileMode) error {
+	return os.MkdirAll(path, mode)
+}
+
+func DeleteDirectory(path string) error {
+	return os.RemoveAll(path)
+}
+
+func MoveDirectory(src, dst string) error {
+	return os.Rename(src, dst)
+}

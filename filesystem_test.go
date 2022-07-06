@@ -262,3 +262,51 @@ func TestDirectories(t *testing.T) {
 	assert.Equal(t, 1, len(dirs))
 	assert.Equal(t, "tmp", dirs[0])
 }
+
+func TestMakeDirectory(t *testing.T) {
+	path := "test/tmp/a"
+	MakeDirectory(path, 0644)
+	defer os.Remove(path)
+	b, _ := IsDirectory(path)
+	assert.True(t, b)
+
+	path = "test/tmp/a/b/c"
+	err := MakeDirectory(path, 0644)
+	assert.NotNil(t, err)
+}
+
+func TestMakeDirectories(t *testing.T) {
+	path := "test/tmp/a/b/c"
+	err := MakeDirectories(path, os.ModePerm)
+	assert.Nil(t, err)
+}
+
+func TestDeleteDirectory(t *testing.T) {
+	path := "test/tmp/a/b/c"
+	MakeDirectories(path, os.ModePerm)
+	DeleteDirectory("test/tmp/a")
+	b, err := Exists(path)
+	assert.NotNil(t, err)
+	assert.False(t, b)
+	assert.True(t, errors.Is(err, os.ErrNotExist))
+}
+
+func TestMoveDirectory(t *testing.T) {
+	path1 := "test/tmp/a"
+	MakeDirectory(path1, os.ModePerm)
+	path2 := "test/tmp/b"
+	MoveDirectory(path1, path2)
+
+	defer func() {
+		os.RemoveAll(path2)
+	}()
+
+	b, err := Exists(path1)
+	assert.NotNil(t, err)
+	assert.False(t, b)
+	assert.True(t, errors.Is(err, os.ErrNotExist))
+
+	b, err = Exists(path2)
+	assert.Nil(t, err)
+	assert.True(t, b)
+}
