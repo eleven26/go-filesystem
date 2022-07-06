@@ -36,6 +36,11 @@ func TestGet(t *testing.T) {
 func TestGetString(t *testing.T) {
 	s, _ := GetString("test/foo.txt")
 	assert.Equal(t, s, "abc")
+
+	s, err := GetString("test/foo1.txt")
+	assert.Equal(t, "", s)
+	assert.NotNil(t, err)
+	assert.True(t, errors.Is(err, os.ErrNotExist))
 }
 
 func TestPut(t *testing.T) {
