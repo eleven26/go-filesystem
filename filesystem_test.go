@@ -3,12 +3,13 @@ package fs
 import (
 	"errors"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"io/fs"
 	"os"
 	"path/filepath"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestExists(t *testing.T) {
@@ -94,7 +95,7 @@ func TestChmod(t *testing.T) {
 		_ = os.Remove(name)
 	}(path)
 
-	Chmod(path, 0600)
+	Chmod(path, 0o600)
 	f, _ := os.Stat(path)
 	assert.Equal(t, "600", fmt.Sprintf("%o", f.Mode().Perm()))
 }
@@ -265,13 +266,13 @@ func TestDirectories(t *testing.T) {
 
 func TestMakeDirectory(t *testing.T) {
 	path := "test/tmp/a"
-	MakeDirectory(path, 0644)
+	MakeDirectory(path, 0o644)
 	defer os.Remove(path)
 	b, _ := IsDirectory(path)
 	assert.True(t, b)
 
 	path = "test/tmp/a/b/c"
-	err := MakeDirectory(path, 0644)
+	err := MakeDirectory(path, 0o644)
 	assert.NotNil(t, err)
 }
 

@@ -17,3 +17,5 @@
 .idea
 test/tmp
 !test/tmp/.gitkeep
+
+bin

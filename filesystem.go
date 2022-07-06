@@ -36,7 +36,7 @@ func GetString(path string) (content string, err error) {
 }
 
 func Put(path string, content []byte) error {
-	return ioutil.WriteFile(path, content, 0644)
+	return ioutil.WriteFile(path, content, 0o644)
 }
 
 func PutString(path string, content string) error {
@@ -44,7 +44,7 @@ func PutString(path string, content string) error {
 }
 
 func Append(path string, content []byte) error {
-	f, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+	f, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0o600)
 	if err != nil {
 		return err
 	}
@@ -98,7 +98,7 @@ func Copy(src, dst string) error {
 	}
 
 	// Write data to dst
-	err = ioutil.WriteFile(dst, data, 0644)
+	err = ioutil.WriteFile(dst, data, 0o644)
 	return err
 }
 
@@ -142,7 +142,6 @@ func Size(path string) (int64, error) {
 
 func LastModified(path string) (t time.Time, err error) {
 	fi, err := os.Stat(path)
-
 	if err != nil {
 		return
 	}
@@ -161,14 +160,14 @@ func IsDirectory(path string) (bool, error) {
 }
 
 func IsReadable(path string) (bool, error) {
-	file, err := os.OpenFile(path, os.O_RDONLY, 0666)
+	file, err := os.OpenFile(path, os.O_RDONLY, 0o666)
 	defer file.Close()
 
 	return err == nil, err
 }
 
 func IsWritable(path string) (bool, error) {
-	file, err := os.OpenFile(path, os.O_WRONLY, 0666)
+	file, err := os.OpenFile(path, os.O_WRONLY, 0o666)
 	defer file.Close()
 
 	return err == nil, err

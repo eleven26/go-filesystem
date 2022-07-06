@@ -14,7 +14,7 @@ func CopyDirectory(dir, dest string) error {
 		return err
 	}
 
-	if err := createIfNotExists(dest, 0755); err != nil {
+	if err := createIfNotExists(dest, 0o755); err != nil {
 		return err
 	}
 
@@ -34,7 +34,7 @@ func CopyDirectory(dir, dest string) error {
 
 		switch fileInfo.Mode() & os.ModeType {
 		case os.ModeDir:
-			if err := createIfNotExists(dst, 0755); err != nil {
+			if err := createIfNotExists(dst, 0o755); err != nil {
 				return err
 			}
 			if err := CopyDirectory(src, dst); err != nil {
