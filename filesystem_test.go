@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+	"time"
 )
 
 func TestExists(t *testing.T) {
@@ -174,4 +175,68 @@ func TestLink(t *testing.T) {
 
 	s, _ := GetString(path2)
 	assert.Equal(t, s, "abc")
+}
+
+func TestName(t *testing.T) {
+	path := "/a/b/c.txt"
+	assert.Equal(t, Name(path), "c.txt")
+}
+
+func TestBasename(t *testing.T) {
+	path := "/a/b/c.txt"
+	assert.Equal(t, Basename(path), "c")
+}
+
+func TestDirname(t *testing.T) {
+	path := "/a/b/c.txt"
+	assert.Equal(t, Dirname(path), "/a/b")
+}
+
+func TestExtension(t *testing.T) {
+	path := "/a/b/c.txt"
+	assert.Equal(t, Extension(path), "txt")
+
+	assert.Equal(t, Extension("a"), "")
+}
+
+func TestSize(t *testing.T) {
+	path := "test/foo.txt"
+
+	s, _ := Size(path)
+	assert.Equal(t, int64(3), s)
+}
+
+func TestLastModified(t *testing.T) {
+	path := "test/foo.txt"
+
+	ti, _ := LastModified(path)
+	assert.IsType(t, time.Time{}, ti)
+}
+
+func TestIsDirectory(t *testing.T) {
+	path := "test/foo.txt"
+	b, _ := IsDirectory(path)
+	assert.False(t, b)
+
+	path = "test"
+	b, _ = IsDirectory(path)
+	assert.True(t, b)
+}
+
+func TestIsReadable(t *testing.T) {
+	path := "test/foo.txt"
+	b, _ := IsReadable(path)
+	assert.True(t, b)
+}
+
+func TestIsWritable(t *testing.T) {
+	path := "test/foo.txt"
+	b, _ := IsWritable(path)
+	assert.True(t, b)
+}
+
+func TestIsFile(t *testing.T) {
+	path := "test/foo.txt"
+	b, _ := IsFile(path)
+	assert.True(t, b)
 }

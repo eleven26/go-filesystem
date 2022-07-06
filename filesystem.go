@@ -4,6 +4,9 @@ import (
 	"io/fs"
 	"io/ioutil"
 	"os"
+	"path/filepath"
+	"strings"
+	"time"
 )
 
 func Exists(path string) (bool, error) {
@@ -98,4 +101,76 @@ func Copy(src, dst string) error {
 
 func Link(oldname, newname string) error {
 	return os.Symlink(oldname, newname)
+}
+
+func Name(path string) string {
+	return filepath.Base(path)
+}
+
+func Basename(path string) string {
+	base := Name(path)
+
+	return base[0:strings.Index(base, ".")]
+}
+
+func Dirname(path string) string {
+	return filepath.Dir(path)
+}
+
+func Extension(path string) string {
+	base := Name(path)
+
+	if !strings.Contains(base, ".") {
+		return ""
+	}
+
+	return base[strings.Index(base, ".")+1:]
+}
+
+func Size(path string) (int64, error) {
+	fi, err := os.Stat(path)
+	if err != nil {
+		return 0, err
+	}
+
+	size := fi.Size()
+	return size, nil
+}
+
+func LastModified(path string) (t time.Time, err error) {
+	fi, err := os.Stat(path)
+
+	if err != nil {
+		return
+	}
+
+	t = fi.ModTime()
+	return
+}
+
+func IsDirectory(path string) (bool, error) {
+	fi, err := os.Stat(path)
+	if err != nil {
+		return false, err
+	}
+
+	return fi.IsDir(), nil
+}
+
+func IsReadable(path string) (bool, error) {
+	file, err := os.OpenFile(path, os.O_RDONLY, 0666)
+	defer file.Close()
+
+	return err == nil, err
+}
+
+func IsWritable(path string) (bool, error) {
+	file, err := os.OpenFile(path, os.O_WRONLY, 0666)
+	defer file.Close()
+
+	return err == nil, err
+}
+
+func IsFile(path string) (bool, error) {
+	return Exists(path)
 }
