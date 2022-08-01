@@ -103,8 +103,8 @@ func Copy(src, dst string) error {
 	return err
 }
 
-func Link(oldname, newname string) error {
-	return os.Symlink(oldname, newname)
+func Link(src, dst string) error {
+	return os.Symlink(src, dst)
 }
 
 func Name(path string) string {
@@ -162,14 +162,14 @@ func IsDirectory(path string) (bool, error) {
 
 func IsReadable(path string) (bool, error) {
 	file, err := os.OpenFile(path, os.O_RDONLY, 0o666)
-	defer file.Close()
+	_ = file.Close()
 
 	return err == nil, err
 }
 
 func IsWritable(path string) (bool, error) {
 	file, err := os.OpenFile(path, os.O_WRONLY, 0o666)
-	defer file.Close()
+	_ = file.Close()
 
 	return err == nil, err
 }
