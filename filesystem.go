@@ -27,6 +27,15 @@ func Get(path string) (b []byte, err error) {
 	return os.ReadFile(path)
 }
 
+func MustGet(path string) []byte {
+	b, err := os.ReadFile(path)
+	if err != nil {
+		panic(err)
+	}
+
+	return b
+}
+
 func GetString(path string) (content string, err error) {
 	b, err := Get(path)
 	if err != nil {
@@ -34,6 +43,15 @@ func GetString(path string) (content string, err error) {
 	}
 
 	return string(b), nil
+}
+
+func MustGetString(path string) string {
+	b, err := Get(path)
+	if err != nil {
+		panic(err)
+	}
+
+	return string(b)
 }
 
 func Put(path string, content []byte) error {

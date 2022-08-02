@@ -33,6 +33,15 @@ func TestGet(t *testing.T) {
 	assert.Equal(t, bs, []byte("abc"))
 }
 
+func TestMustGet(t *testing.T) {
+	assert.Panics(t, func() {
+		_ = MustGet("filesystem1.go")
+	})
+
+	content := MustGet("test/foo.txt")
+	assert.Equal(t, content, []byte("abc"))
+}
+
 func TestGetString(t *testing.T) {
 	s, _ := GetString("test/foo.txt")
 	assert.Equal(t, s, "abc")
@@ -41,6 +50,15 @@ func TestGetString(t *testing.T) {
 	assert.Equal(t, "", s)
 	assert.NotNil(t, err)
 	assert.True(t, errors.Is(err, os.ErrNotExist))
+}
+
+func TestMustGetString(t *testing.T) {
+	assert.Panics(t, func() {
+		_ = MustGetString("test/foo1.txt")
+	})
+
+	content := MustGetString("test/foo.txt")
+	assert.Equal(t, content, "abc")
 }
 
 func TestPut(t *testing.T) {
