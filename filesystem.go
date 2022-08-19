@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	copy2 "github.com/otiai10/copy"
 )
 
 var Separator = fmt.Sprintf("%c", os.PathSeparator)
@@ -269,4 +271,8 @@ func DeleteDirectory(path string) error {
 
 func MoveDirectory(src, dst string) error {
 	return os.Rename(src, dst)
+}
+
+func CopyDirectory(dir, dest string) error {
+	return copy2.Copy(dir, dest)
 }
