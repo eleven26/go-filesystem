@@ -14,6 +14,7 @@ import (
 
 var Separator = fmt.Sprintf("%c", os.PathSeparator)
 
+// Exists check if path exists.
 func Exists(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {
